@@ -11,7 +11,7 @@ repos:
       - id: ruff
       - id: ruff-format
 -   repo: https://github.com/rtts/djhtml
-    rev: 'main'  # replace with the latest tag on GitHub
+    rev: '3.0.7'
     hooks:
       - id: djhtml
       - id: djcss
