@@ -15,7 +15,7 @@ class State(TypedDict):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    runner = MultiThreadedRunner(CarSystem)
+    runner = MultiThreadedRunner(CarSystem())
     runner.start()
     app = runner.get(CarApplication)
     yield dict(app=app)
