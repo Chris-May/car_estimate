@@ -1,0 +1,19 @@
+[project]
+name = "cars"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Chris May", email = "chris@may.org" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "eventsourcing>=9.3.5",
+]
+
+[project.scripts]
+cars = "cars:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
