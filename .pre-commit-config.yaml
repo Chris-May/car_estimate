@@ -14,5 +14,6 @@ repos:
     rev: '3.0.7'
     hooks:
       - id: djhtml
+        files: src/.*/templates/.*\.html$
       - id: djcss
       - id: djjs
