@@ -1,57 +1,61 @@
 import logging
-import sqlite3
+from datetime import UTC, datetime
 
+from eventsourcing.application import ProcessingEvent
 from eventsourcing.dispatch import singledispatchmethod
+from eventsourcing.domain import DomainEventProtocol
 from eventsourcing.system import ProcessApplication
 
+from cars.common.db import sqlite_execute
 from cars.domain.car import Car
 
 logger = logging.getLogger(__name__)
-DATABASE_LOCATION = 'cars.sqlite'
-conn = sqlite3.connect(DATABASE_LOCATION)
 
-cursor = conn.cursor()
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS cars (
-    car_id STRING PRIMARY KEY,
-    make STRING,
-    model STRING,
-    year INTEGER,
-    vin STRING PRIMARY KEY,
-    plate STRING
+sqlite_execute(
+    """
+    CREATE TABLE IF NOT EXISTS awaiting_history (
+        car_id STRING PRIMARY KEY,
+        make STRING,
+        model STRING,
+        year INTEGER,
+        vin STRING,
+        plate STRING,
+        added_at TIMESTAMP
+    )
+    """
 )
-""")
-conn.commit()
-conn.close()
 
 
 class AwaitingHistoryViewModel(ProcessApplication):
     @singledispatchmethod
-    def dispatch(self, event, process):
-        logger.warning('Unexpected dispatch event: %s %S', event, process)
+    def policy(
+        self, domain_event: DomainEventProtocol, processing_event: ProcessingEvent
+    ) -> None:
+        logger.warning(
+            'Unexpected dispatch event: %s %s', domain_event, processing_event
+        )
 
-    @dispatch.register('Car.Created')
-    def add_to_database(self, event: Car.Created, _):
-        cursor = conn.cursor()
-        cursor.execute(
+    @policy.register(Car.Created)
+    def _(self, domain_event: Car.Created, _):
+        sqlite_execute(
             """
-        INSERT INTO cars (car_id, make, model, year, vin, plate) VALUES (?,?,?,?,?,?)
+        INSERT INTO awaiting_history (car_id, make, model, year, vin, plate, added_at)
+        VALUES (?,?,?,?,?,?,?)
         """,
             (
-                event.originator_id,
-                event.make,
-                event.model,
-                event.year,
-                event.vin,
-                event.plate,
+                domain_event.originator_id.hex,
+                domain_event.make,
+                domain_event.model,
+                domain_event.year,
+                domain_event.vin,
+                domain_event.plate,
+                datetime.now(tz=UTC).timestamp(),
             ),
         )
-        conn.commit()
-        conn.close()
 
-    @dispatch.register('Car.HistoryAdded')
-    def remove_from_database(self, event: Car.HistoryAdded, _):
-        cursor = conn.cursor()
-        cursor.execute('DELETE FROM cars WHERE car_id = ?', event.originator_id)
-        conn.commit()
-        conn.close()
+    @policy.register(Car.HistoryAdded)
+    def remove_from_database(self, domain_event: Car.HistoryAdded, _):
+        sqlite_execute(
+            'DELETE FROM awaiting_history WHERE car_id = ?',
+            (domain_event.originator_id.hex,),
+        )
