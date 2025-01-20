@@ -12,6 +12,11 @@ repos:
         args: [ --fix ]
       - id: ruff-format
 -   repo: https://github.com/djlint/djlint
-    rev: v1.35.4
+    rev: v1.36.4
     hooks:
-      - id: djlint-reformat
+      - id: djlint-reformat-jinja
+        args: [ --format-css, --format-js]
+        types_or: [html, jinja]
+
+      - id: djlint-jinja
+        types_or: [html, jinja]
