@@ -9,11 +9,9 @@ repos:
     rev: v0.9.2
     hooks:
       - id: ruff
+        args: [ --fix ]
       - id: ruff-format
--   repo: https://github.com/rtts/djhtml
-    rev: '3.0.7'
+-   repo: https://github.com/djlint/djlint
+    rev: v1.35.4
     hooks:
-      - id: djhtml
-        files: src/.*/templates/.*\.html$
-      - id: djcss
-      - id: djjs
+      - id: djlint-reformat

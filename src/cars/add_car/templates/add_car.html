@@ -1,17 +1,31 @@
 {% extends '_base.html' %}
 {% block content %}
-
-  <div class="container">
-    <h1>Add a car</h1>
-    <form method="POST">
-      <fieldset>
-        <label><span>Make</span><input type="text" name="make" required></label>
-        <label><span>Model</span><input type="text" name="model" required></label>
-        <label><span>Year</span><input type="number" name="year" required></label>
-        <label><span>VIN</span><input type="text" name="vin" required></label>
-        <label><span>License plate</span><input type="text" name="plate" required></label>
-      </fieldset>
-      <input type="submit" value="Add car">
-    </form>
-  </div>
+    <div class="container">
+        <h1>Add a car</h1>
+        <form method="POST">
+            <fieldset>
+                <label>
+                    <span>Make</span>
+                    <input type="text" name="make" required>
+                </label>
+                <label>
+                    <span>Model</span>
+                    <input type="text" name="model" required>
+                </label>
+                <label>
+                    <span>Year</span>
+                    <input type="number" name="year" required>
+                </label>
+                <label>
+                    <span>VIN</span>
+                    <input type="text" name="vin" required>
+                </label>
+                <label>
+                    <span>License plate</span>
+                    <input type="text" name="plate" required>
+                </label>
+            </fieldset>
+            <input type="submit" value="Add car">
+        </form>
+    </div>
 {% endblock %}
