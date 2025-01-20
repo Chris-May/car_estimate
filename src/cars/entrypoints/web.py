@@ -4,10 +4,10 @@ from typing import TypedDict
 from eventsourcing.system import MultiThreadedRunner
 from fastapi import FastAPI
 
+from cars.add_car.view import add_car_router
 from cars.domain.application import CarApplication
 from cars.domain.system import CarSystem
 from cars.view_car.view import car_view_router
-from src.cars.add_car.view import add_car_router
 
 
 class State(TypedDict):
