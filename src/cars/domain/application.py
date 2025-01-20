@@ -4,7 +4,7 @@ from uuid import UUID
 
 from eventsourcing.application import Application
 
-from src.cars.domain.car import Car, Entry
+from cars.domain.car import Car, Entry
 
 
 class CarApplication(Application):
