@@ -8,6 +8,9 @@ from src.cars.domain.car import Car, Entry
 
 
 class CarApplication(Application):
+    def get_car(self, car_id: UUID) -> Car:
+        return self.repository.get(car_id)
+
     def add_car(self, make: str, model: str, plate: str, vin: str, year: int) -> Car:
         car = Car(make, model, plate, vin, year)
         self.save(car)

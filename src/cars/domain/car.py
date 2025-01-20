@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 from decimal import Decimal
 
-from eventsourcing.domain import Aggregate
+from eventsourcing.domain import Aggregate, event
 
 
 class Entry: ...
@@ -24,8 +24,10 @@ class Car(Aggregate):
         self.history_log: list[Entry] = []
         self.estimate: int | None = None
 
+    @event('HistoryAdded')
     def add_history_entry(self, log: Iterable[Entry]):
         self.history_log.extend(log)
 
+    @event('EstimateUpdated')
     def add_estimate(self, estimate: Decimal):
         self.estimate = estimate

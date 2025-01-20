@@ -6,6 +6,7 @@ from fastapi import FastAPI
 
 from cars.domain.application import CarApplication
 from cars.domain.system import CarSystem
+from cars.view_car.view import car_view_router
 from src.cars.add_car.view import add_car_router
 
 
@@ -24,5 +25,5 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-for router in (add_car_router,):
+for router in (add_car_router, car_view_router):
     app.include_router(router)
