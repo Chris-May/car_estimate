@@ -18,7 +18,7 @@ class CarApplication(Application):
 
     def add_history(self, car_id: str, log: Iterable[Entry]) -> Car:
         car = self.repository.get(UUID(car_id))
-        car.add_history(log)
+        car.add_history_entry(log)
         self.save(car)
         return car
 
