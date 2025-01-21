@@ -1,3 +1,4 @@
+from add_estimate.processor import GetEstimateProcessor
 from eventsourcing.system import System
 
 from cars.add_history.view_model import AwaitingHistoryViewModel
@@ -8,6 +9,7 @@ class CarSystem(System):
     def __init__(self) -> None:
         super().__init__(
             pipes=[
-                [CarApplication, AwaitingHistoryViewModel],
+                [CarApplication, AwaitingHistoryViewModel, GetEstimateProcessor],
+                [CarApplication, GetEstimateProcessor],
             ]
         )
