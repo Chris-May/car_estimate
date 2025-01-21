@@ -1,10 +1,11 @@
 import logging
 
 import httpx
-from domain.car import Car
 from eventsourcing.application import ProcessingEvent
 from eventsourcing.domain import DomainEventProtocol
 from eventsourcing.system import ProcessApplication
+
+from cars.domain.car import Car
 
 logger = logging.getLogger(__name__)
 ESTIMATE_URL = 'http://localhost:8000/data/estimate'
