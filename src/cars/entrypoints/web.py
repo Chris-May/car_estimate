@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from typing import TypedDict
 
+from common.examples import other
 from eventsourcing.system import MultiThreadedRunner
 from fastapi import FastAPI
 
@@ -25,5 +26,5 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-for router in (add_car_router, car_view_router):
+for router in (add_car_router, car_view_router, other):
     app.include_router(router)

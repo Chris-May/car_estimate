@@ -11,7 +11,7 @@ from cars.domain.system import CarSystem
 logger = logging.getLogger(__name__)
 connection_limit = asyncio.Semaphore(5)
 client = httpx.AsyncClient()
-HISTORY_URL = 'http://localhost:8001'
+HISTORY_URL = 'http://localhost:8000/data/'
 
 
 def select_oldest_entries(limit: int = 100) -> list[dict]:
