@@ -6,12 +6,12 @@ from eventsourcing.dispatch import singledispatchmethod
 from eventsourcing.domain import DomainEventProtocol
 from eventsourcing.system import ProcessApplication
 
-from cars.common.db import sqlite_execute
+from cars.common.db import sqlite_insert
 from cars.domain.car import Car
 
 logger = logging.getLogger(__name__)
 
-sqlite_execute(
+sqlite_insert(
     """
     CREATE TABLE IF NOT EXISTS awaiting_history (
         car_id STRING PRIMARY KEY,
@@ -37,7 +37,7 @@ class AwaitingHistoryViewModel(ProcessApplication):
 
     @policy.register(Car.Created)
     def _(self, domain_event: Car.Created, _):
-        sqlite_execute(
+        sqlite_insert(
             """
         INSERT INTO awaiting_history (car_id, make, model, year, vin, plate, added_at)
         VALUES (?,?,?,?,?,?,?)
@@ -55,7 +55,7 @@ class AwaitingHistoryViewModel(ProcessApplication):
 
     @policy.register(Car.HistoryAdded)
     def remove_from_database(self, domain_event: Car.HistoryAdded, _):
-        sqlite_execute(
+        sqlite_insert(
             'DELETE FROM awaiting_history WHERE car_id = ?',
             (domain_event.originator_id.hex,),
         )

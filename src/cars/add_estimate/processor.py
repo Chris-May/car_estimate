@@ -1,10 +1,12 @@
 import logging
+from decimal import Decimal
 
 import httpx
 from eventsourcing.application import ProcessingEvent
 from eventsourcing.domain import DomainEventProtocol
 from eventsourcing.system import ProcessApplication
 
+from cars.domain.application import add_estimate_to_car
 from cars.domain.car import Car
 
 logger = logging.getLogger(__name__)
@@ -15,7 +17,6 @@ class GetEstimateProcessor(ProcessApplication):
     def policy(
         self, domain_event: DomainEventProtocol, processing_event: ProcessingEvent
     ) -> None:
-        logger.warning('processing events: %s %s', domain_event, processing_event)
         if isinstance(domain_event, Car.HistoryAdded):
             car = self.repository.get(domain_event.originator_id)
             result = httpx.get(
@@ -28,7 +29,7 @@ class GetEstimateProcessor(ProcessApplication):
                     plate=car.plate,
                     history_log=car.history_log,
                 ),
+                timeout=60,
             )
             data = result.json()
-            car.add_estimate(data['estimate'])
-            self.save(car)
+            add_estimate_to_car(car.id.hex, Decimal(data['estimate']))

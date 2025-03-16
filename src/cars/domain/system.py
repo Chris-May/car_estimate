@@ -9,7 +9,7 @@ class CarSystem(System):
     def __init__(self) -> None:
         super().__init__(
             pipes=[
-                [CarApplication, AwaitingHistoryViewModel, GetEstimateProcessor],
                 [CarApplication, GetEstimateProcessor],
+                [CarApplication, AwaitingHistoryViewModel],
             ]
         )

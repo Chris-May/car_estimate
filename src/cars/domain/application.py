@@ -27,3 +27,7 @@ class CarApplication(Application):
         car.add_estimate(estimate)
         self.save(car)
         return car
+
+
+def add_estimate_to_car(car_id: str, estimate: Decimal):
+    CarApplication().add_estimate(car_id, estimate)
